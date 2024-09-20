@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    line-height: 1.6;
+    background-color: black;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+}
+#question-container div {
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+}
+
+#result div {
+    background-color: white;
+    color: black;
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+}
+
+label {
+    display: block; /* Faz cada resposta aparecer em uma nova linha */
+}
+
+.question-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 340px;
+}
+
+button {
+    margin: auto;
+}
+
+
