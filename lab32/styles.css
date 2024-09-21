@@ -9,11 +9,12 @@ body {
 h1 {
     text-align: center;
 }
+
 #question-container div {
     margin-bottom: 20px;
     margin-left: auto;
     margin-right: auto;
-    width: 600px;
+    width: 800px;
 }
 
 #result div {
@@ -25,17 +26,30 @@ h1 {
 }
 
 label {
-    display: block; /* Faz cada resposta aparecer em uma nova linha */
-}
-
-.question-container {
-    margin-left: auto;
-    margin-right: auto;
-    width: 340px;
+    display: block;
+    /* Faz cada resposta aparecer em uma nova linha */
 }
 
 button {
     margin: auto;
 }
 
+.fade {
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
 
+.fade-in {
+    opacity: 1;
+}
+
+.bold {
+    font-weight: 800;
+    color: red;
+}
+.timer {
+    text-align: center;
+}
+input {
+    text-align: left;
+}

@@ -1,103 +1,166 @@
-const questions = [
-    {
-        question: "What is the default port for FTP servers?",
-        answers: ["21",'32','124','8080'],
-        correctAnswer: 0
-    },
-    {
-        question: "Which of the following is a JavaScript framework?",
-        answers: ["Django", "React", "Flask", "Ruby on Rails"],
-        correctAnswer: 1
-    },
-    {
-        question: "What is the purpose of the <div> tag in HTML?",
-        answers: [
-            "To create a hyperlink",
-            "To embed multimedia content",
-            "To display a list of items",
-            "To define a division or section in a document"
-        ],
-        correctAnswer: 3
-    },
-    {
-        question: "Which of the following is used to style a webpage?",
-        answers: [ "HTML", "SQL", 'CSS', 'XML'],
-        correctAnswer: 2
-    },
-    {
-        question: "If you want to scan for services and ports, what tool you would use?",
-        answers: ["Metasploit", "Wireshark", "Nmap", "Burp Suite"],
-        correctAnswer: 2
-    },
-    {
-        question: "What the 'mov' instruction do in Assembly?",
-        answers: ["Add a value to a register", "Subtract a value from a register", "Print a caracter on the terminal", "Move a value to a register"],
-        correctAnswer: 3
-    },
-];
+let questions = []
 
-// Carrega perguntas na página
+let currentQuestionIndex = 0;
+let timer;
+const timeLimit = 60; // seconds
+let userAnswers = Array(questions.length).fill(null); // Track user answers
+
 function loadQuestions() {
+    const selQuestion = document.getElementById('selQuestion').value;
+    console.log(selQuestion);
+    
+    loadQuestionsFromFile(selQuestion).then(() => {
+        const questionContainer = document.getElementById('question-container');
+        questionContainer.innerHTML = '';
+        currentQuestionIndex = 0;
+        loadQuestion(currentQuestionIndex);
+    });
+}
+
+function loadQuestion(index) {
+    clearTimeout(timer);
     const questionContainer = document.getElementById('question-container');
-    questionContainer.innerHTML = ``
-    document.getElementById('result').innerHTML = ``
 
-    questions.forEach((q, index) => {
-        const div = document.createElement('div')
-        div.id = `div-${index}`
-        div.innerHTML = `<h3 id='question-header-${index}'>${q.question}</h3>`;
+    // Hide previous timer
+    const existingTimer = document.getElementById('timer');
+    if (existingTimer) {
+        existingTimer.remove();
+    }
+
+    if (index < questions.length) {
+        const q = questions[index];
+        const div = document.createElement('div');
+        div.id = `div-${index}`;
+        div.classList.add('fade')
+        div.innerHTML = `<h3>${q.question}</h3>`;
+
         q.answers.forEach((answer, i) => {
-            div.innerHTML += 
-            `<label>
-                <input id='answer-${index}-${i}' type="radio" name="question${index}" value="${i}" onchange='checkAllAnswered()'> ${answer}
-            </label><br>`;
+            div.innerHTML += `
+                <label>
+                    <input id='answer-${index}-${i}' type="radio" name="question${index}" value="${i}" 
+                    ${userAnswers[index] === i ? 'checked' : ''} 
+                    onchange='checkAnswered(${index})'> ${answer}
+                </label><br>`;
         });
+
         questionContainer.appendChild(div);
-    });
+
+        setTimeout(() => {
+            div.classList.add('fade-in'); // Apply fade-in class after a short delay
+        }, 10)
+
+        startTimer(index);
+    } else {
+        displayResults();
+    }
 }
 
-function checkAllAnswered() {
-    const allAnswered = questions.every((_, index) => {
-        return document.querySelector(`input[name="question${index}"]:checked`);
-    });
+function startTimer(index) {
+    let timeRemaining = timeLimit;
+    const timerDisplay = document.createElement('p');
+    timerDisplay.id = 'timer';
+    timerDisplay.innerHTML = `<p class='timer'><span class='bold'>Time remaining</span>: ${timeRemaining} seconds`;
+    document.getElementById('question-container').appendChild(timerDisplay);
 
-    document.getElementById('submit-button').style.display = allAnswered ? 'block' : 'none';
+    timer = setInterval(() => {
+        timeRemaining--;
+        timerDisplay.innerHTML = `<p class='timer'><span class='bold'>Time remaining</span>: ${timeRemaining} seconds`
+
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            markAsWrong(index);
+            userAnswers[index] = null; // Mark as unanswered
+            loadQuestion(++currentQuestionIndex);
+        }
+    }, 1000);
 }
 
-checkAllAnswered()
+function markAsWrong(index) {
+    const ans_div = document.getElementById(`div-${index}`);
+    const correctAnswer = questions[index].correctAnswer;
+    const pErrado = document.createElement('p');
+    pErrado.style.cssText = 'color: yellow; font-weight: 800; width: auto;';
+    pErrado.innerHTML = `<p>Time's up! Correct answer: ${questions[index].answers[correctAnswer]}</p>`;
+    ans_div.appendChild(pErrado);
+    ans_div.style.color = 'red'; // Change color of the question
+}
 
-// Avalia as respostas fornecidas pelo usuário
-function submitAnswers() {
+function checkAnswered(index) {
+    clearTimeout(timer); // Stop the timer when answered
+    const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+    userAnswers[index] = selectedAnswer ? parseInt(selectedAnswer.value) : null;
+
+    // Disable all options after an answer is selected
+    const options = document.querySelectorAll(`input[name="question${index}"]`);
+    options.forEach(option => {
+        option.disabled = true;
+    });
+
+    loadQuestion(++currentQuestionIndex);
+}
+
+function displayResults() {
+    const result = document.createElement('div')
     let score = 0;
 
     questions.forEach((q, index) => {
-        const ans_div = document.getElementById(`div-${index}`)
-        const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
-        const rightAnswer = document.getElementById(`answer-${index}-${questions[index].correctAnswer}`)
-        const label = selectedAnswer.parentElement;
-        console.log(rightAnswer)
-
-        if (selectedAnswer && parseInt(selectedAnswer.value) === q.correctAnswer) {
-            score++
-            label.style.cssText = 'color: green;'
-            const pCerto = document.createElement('p')
-            pCerto.style.cssText = 'color: rgb(0, 182, 55); font-weight: 800; width: auto;'
-            pCerto.innerHTML = `<p>A resposta está correta!</p>`
-            ans_div.appendChild(pCerto)
+        const ans_div = document.getElementById(`div-${index}`);
+        if (userAnswers[index] === q.correctAnswer) {
+            score++;
+            ans_div.style.color = 'green'; // Change color for correct answers
+            const pCerto = document.createElement('p');
+            pCerto.style.cssText = 'color: green; font-weight: 800; width: auto;';
+            pCerto.innerHTML = `<p>Correct answer!</p>`;
+            ans_div.appendChild(pCerto);
+        } else {
+            const correctAnswer = questions[index].correctAnswer;
+            ans_div.style.color = 'red'; // Change color for wrong answers
+            const pErrado = document.createElement('p');
+            pErrado.style.cssText = 'color: yellow; font-weight: 800; width: auto;';
+            pErrado.innerHTML = `<p>Correct answer: ${q.answers[correctAnswer]}</p>`;
+            ans_div.appendChild(pErrado);
         }
-        else {
-            const pErrado = document.createElement('p')
-            pErrado.style.cssText = 'color: yellow; font-weight: 800; width: auto;'
-            pErrado.innerHTML = `<p>Resposta correta: ${q.answers[q.correctAnswer]}</p>`
-            ans_div.appendChild(pErrado)
-            label.style.cssText = 'color: red;'
-        }
-        
     });
-    const result = document.getElementById('result')
-    result.innerHTML = `You scored ${score} out of ${questions.length} <p></p><button onclick='loadQuestions()'>Reset</button>`;
-    result.style.cssText = "background-color: white; color: black; margin: auto; margin-top: 20px; margin-bottom: 20px; width: 400px; border-radius: 20px; text-align: center; font-weight: 800; padding: 10px;"
-    document.getElementById('submit-button').style.display = 'none'
+
+    result.innerHTML = `You scored ${score} out of ${questions.length}.<p></p><button onclick='start()'>Reset</button>`;
+    const questionContainer = document.getElementById('question-container');
+    result.style.cssText = 'text-align: center; background-color: white; color: black; width: 300px; border-radius: 20px; padding: 20px; font-weight: 800; margin: auto'
+    questionContainer.appendChild(result)
+}   
+
+function loadQuestionsFromFile(selQuestion) {
+    return fetch(selQuestion)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            questions = data; // Store the questions
+            console.log(questions);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
 }
 
-window.onload = loadQuestions;
+function start() {
+    userAnswers = Array(questions.length).fill(null);
+    const container = document.getElementById('question-container')
+    container.innerHTML = ``
+
+    const div = document.createElement('div')
+    div.innerHTML = `
+        <select id='selQuestion'>
+            <option value='questions/comp.json'>Comp. Eng. Quiz</option>
+            <option value='questions/plants.json'>Plants Quiz</option>
+            <option value='questions/animals.json'>Animals Quiz</option>
+        </select>
+        <button id="start" onclick="loadQuestions()">Start Quiz</button>
+    `
+    container.appendChild(div)
+    div.style.cssText = `background-color: pink; border-radius: 5px; color: black; width: 300px; text-align: center; padding: 10px;`
+}
+
+window.onload = start;

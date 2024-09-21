@@ -1,0 +1,62 @@
+[
+    {
+        "question": "What is the primary function of chlorophyll in plants?",
+        "answers": [
+            "To absorb water",
+            "To perform photosynthesis",
+            "To provide structural support",
+            "To store nutrients"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which part of the plant is responsible for nutrient absorption?",
+        "answers": [
+            "Stem",
+            "Leaves",
+            "Roots",
+            "Flowers"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What type of reproduction involves the fusion of male and female gametes?",
+        "answers": [
+            "Asexual reproduction",
+            "Vegetative propagation",
+            "Sexual reproduction",
+            "Spore formation"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which of the following plants is known for its ability to survive in extremely dry conditions?",
+        "answers": [
+            "Cactus",
+            "Fern",
+            "Bamboo",
+            "Maple"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the main purpose of the plant cuticle?",
+        "answers": [
+            "Photosynthesis",
+            "Protection against water loss",
+            "Nutrient absorption",
+            "Reproductive function"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which process allows plants to convert light energy into chemical energy?",
+        "answers": [
+            "Respiration",
+            "Transpiration",
+            "Photosynthesis",
+            "Fermentation"
+        ],
+        "correctAnswer": 2
+    }
+]

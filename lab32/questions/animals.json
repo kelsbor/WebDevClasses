@@ -1,0 +1,72 @@
+[
+    {
+        "question": "What is the largest mammal in the world?",
+        "answers": [
+            "Elephant",
+            "Blue Whale",
+            "Giraffe",
+            "Great White Shark"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which animal is known for its ability to change color?",
+        "answers": [
+            "Chameleon",
+            "Octopus",
+            "Cuttlefish",
+            "All of the above"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What is the primary diet of a panda?",
+        "answers": [
+            "Meat",
+            "Bamboo",
+            "Fruits",
+            "Insects"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following animals can live both on land and in water?",
+        "answers": [
+            "Fish",
+            "Amphibians",
+            "Reptiles",
+            "Birds"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What type of animal is a Komodo dragon?",
+        "answers": [
+            "Mammal",
+            "Bird",
+            "Reptile",
+            "Amphibian"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which animal is known as the 'king of the jungle'?",
+        "answers": [
+            "Tiger",
+            "Elephant",
+            "Lion",
+            "Bear"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the fastest land animal?",
+        "answers": [
+            "Cheetah",
+            "Horse",
+            "Greyhound",
+            "Lion"
+        ],
+        "correctAnswer": 0
+    }
+]
